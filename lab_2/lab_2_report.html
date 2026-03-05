@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Лабораторная работа №2 — HTTP</title>
+
+  <style>
+    body{
+      font-family: Arial, sans-serif;
+      background:#f4f4f4;
+      margin:40px;
+    }
+
+    h1{
+      text-align:center;
+    }
+
+    .section{
+      background:white;
+      padding:20px;
+      margin-bottom:40px;
+      border-radius:10px;
+      box-shadow:0 0 10px rgba(0,0,0,0.1);
+    }
+
+    img{
+      max-width:100%;
+      border:1px solid #ccc;
+    }
+
+    .code{
+      background:#eee;
+      padding:10px;
+      margin-top:10px;
+      font-family:monospace;
+    }
+  </style>
+
+</head>
+
+<body>
+
+<h1>Лабораторная работа №2<br>Исследование протокола HTTP</h1>
+
+
+<div class="section">
+  <h2>1. Получение главной страницы (HTTP/1.0)</h2>
+
+  <div class="code">
+    GET / HTTP/1.0
+  </div>
+
+  <p><b>Ответ сервера:</b> HTTP/1.1 200 OK</p>
+
+  <img src="images/1.jpg">
+</div>
+
+
+
+<div class="section">
+  <h2>2. Получение внутренней страницы (HTTP/1.1)</h2>
+
+  <div class="code">
+    GET /web_labs_backend/lab_2/index.php HTTP/1.1<br>
+    Host: localhost
+  </div>
+
+  <p><b>Ответ сервера:</b> страница index.php</p>
+
+  <img src="images/2.jpg">
+</div>
+
+
+
+<div class="section">
+  <h2>3. Определение размера файла без скачивания (HEAD)</h2>
+
+  <div class="code">
+    HEAD /web_labs_backend/lab_2/file.tar.gz HTTP/1.1<br>
+    Host: localhost
+  </div>
+
+  <p><b>Ответ сервера:</b></p>
+
+  <div class="code">
+    HTTP/1.1 200 OK<br>
+    Content-Type: application/octet-stream<br>
+    Content-Length: 11335
+  </div>
+
+  <p>Размер файла: <b>11335 байт</b></p>
+
+  <img src="images/3.jpg">
+</div>
+
+
+
+<div class="section">
+  <h2>4. Определение медиатипа файла</h2>
+
+  <div class="code">
+    GET /web_labs_backend/lab_2/image.png HTTP/1.1<br>
+    Host: localhost
+  </div>
+
+  <p><b>Ответ сервера:</b></p>
+
+  <div class="code">
+    Content-Type: image/png
+  </div>
+
+  <img src="images/4.jpg">
+</div>
+
+
+
+<div class="section">
+  <h2>5. Отправка комментария (POST)</h2>
+
+  <div class="code">
+    POST /web_labs_backend/lab_2/index.php HTTP/1.1<br>
+    Host: localhost<br>
+    Content-Type: application/x-www-form-urlencoded<br>
+    Content-Length: 13
+    <br><br>
+    comment=hello
+  </div>
+
+  <p>В ответе сервер возвращает полученный параметр:</p>
+
+  <div class="code">
+    [comment] => hello
+  </div>
+
+  <img src="images/5.jpg">
+</div>
+
+
+
+<div class="section">
+  <h2>6. Получение части файла (Range)</h2>
+
+  <div class="code">
+    GET /web_labs_backend/lab_2/file.tar.gz HTTP/1.1<br>
+    Host: localhost<br>
+    Range: bytes=0-99
+  </div>
+
+  <p><b>Ответ сервера:</b></p>
+
+  <div class="code">
+    HTTP/1.1 206 Partial Content<br>
+    Content-Range: bytes 0-99/11335
+  </div>
+
+  <p>Сервер вернул первые 100 байт файла.</p>
+
+  <img src="images/6.jpg">
+</div>
+
+
+
+<div class="section">
+  <h2>7. Определение кодировки страницы</h2>
+
+  <div class="code">
+    GET /web_labs_backend/lab_2/index.php HTTP/1.1<br>
+    Host: localhost
+  </div>
+
+  <p><b>Ответ сервера:</b></p>
+
+  <div class="code">
+    Content-Type: text/html; charset=UTF-8
+  </div>
+
+  <p>Кодировка страницы: <b>UTF-8</b></p>
+
+  <img src="images/7.jpg">
+</div>
+
+
+</body>
+</html>
