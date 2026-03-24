@@ -184,10 +184,6 @@ function clearError(element, errorId) {
     }
 }
 
-function normalizeSpaces(value) {
-    return value.replace(/\s+/g, ' ').trim();
-}
-
 function isValidDate(value) {
     if (!/^\d{2}\.\d{2}\.\d{4}$/.test(value)) {
         return false;
@@ -211,23 +207,23 @@ function isValidDate(value) {
     return true;
 }
 
-function validateFio() {
-    const value = normalizeSpaces(fio.value);
+function validateFio(showStrictError = true) {
+    const value = fio.value;
+    const trimmedValue = value.trim();
+    const normalizedValue = value.replace(/\s+/g, ' ').trim();
     const regex = /^[A-Za-zА-Яа-яЁё]+(?:[ -][A-Za-zА-Яа-яЁё]+)*$/u;
 
-    fio.value = value;
-
-    if (value === '') {
+    if (trimmedValue === '') {
         setError(fio, 'fio-error', 'Поле ФИО обязательно для заполнения.');
         return false;
     }
 
-    if (value.length > 150) {
+    if (normalizedValue.length > 150) {
         setError(fio, 'fio-error', 'ФИО не должно быть длиннее 150 символов.');
         return false;
     }
 
-    if (!regex.test(value)) {
+    if (showStrictError && !regex.test(normalizedValue)) {
         setError(fio, 'fio-error', 'ФИО должно содержать только буквы, пробелы и дефис.');
         return false;
     }
@@ -349,7 +345,7 @@ function validateContract() {
 
 function validateForm() {
     const results = [
-        validateFio(),
+        validateFio(true),
         validatePhone(),
         validateEmail(),
         validateBirthDate(),
@@ -364,7 +360,15 @@ function validateForm() {
     });
 }
 
-fio.addEventListener('input', validateFio);
+fio.addEventListener('input', function() {
+    clearError(fio, 'fio-error');
+});
+
+fio.addEventListener('blur', function() {
+    fio.value = fio.value.replace(/\s+/g, ' ').trim();
+    validateFio(true);
+});
+
 phone.addEventListener('input', validatePhone);
 email.addEventListener('input', validateEmail);
 birthDate.addEventListener('input', validateBirthDate);
@@ -391,11 +395,6 @@ birthDate.addEventListener('input', function() {
     }
 
     birthDate.value = value;
-});
-
-fio.addEventListener('blur', function() {
-    fio.value = normalizeSpaces(fio.value);
-    validateFio();
 });
 
 form.addEventListener('submit', function(event) {
