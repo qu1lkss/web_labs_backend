@@ -1,7 +1,7 @@
 <?php
-$dsn = 'mysql:host=localhost;port=8889;dbname=web_lab_3;charset=utf8';
-$username = 'root';
-$password = 'root';
+$dsn = 'mysql:host=localhost;dbname=web_lab_3;charset=utf8';
+$username = 'web_lab_user';
+$password = '1111';
 
 $languages_list = [
     1 => 'Pascal',
